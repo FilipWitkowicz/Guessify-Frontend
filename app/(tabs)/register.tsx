@@ -30,7 +30,6 @@ export default function Page2Screen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Strona 2</Text>
       <TextInput
         style={styles.input}
         placeholder="Username"

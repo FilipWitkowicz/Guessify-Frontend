@@ -1,13 +1,19 @@
-import { View, Text, StyleSheet } from "react-native";
-import React, { useEffect } from "react";
+import { View, Text, StyleSheet, TextInput, Button } from "react-native";
+import React, { useEffect, useState } from "react";
 import * as SecureStore from 'expo-secure-store';
+import { useRouter } from 'expo-router';
 
 export default function HomeScreen() {
+  const [token, setToken] = useState(null);
+  const [nickname, setNickname] = useState("");
+  const router = useRouter();
+
   useEffect(() => {
     const fetchToken = async () => {
-      const token = await SecureStore.getItemAsync('token');
-      if (token) {
-        console.log("Token:", token);
+      const storedToken = await SecureStore.getItemAsync('userToken');
+      if (storedToken) {
+        console.log("Token:", storedToken);
+        setToken(storedToken);
       } else {
         console.log("Brak tokena.");
       }
@@ -18,7 +24,28 @@ export default function HomeScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>HOME</Text>
+      {token ? (
+        <View style={styles.loggedInContainer}>
+          <Text style={styles.label}>Podaj swój pseudonim:</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Twój pseudonim"
+            value={nickname}
+            onChangeText={setNickname}
+          />
+          {nickname.trim().length > 0 && (
+            <View style={styles.buttonContainer}>
+              <Button title="Utwórz grę" onPress={() => router.push('/createGame')} />
+              <Button title="Dołącz do gry" onPress={() => router.push('/joinGame')} />
+            </View>
+          )}
+        </View>
+      ) : (
+        <View>
+          <Text>Nie jesteś zalogowany!</Text>
+          <Button title="Zaloguj się" onPress={() => router.push('/login')} />
+        </View>
+      )}
     </View>
   );
 }
@@ -28,9 +55,27 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    padding: 20,
   },
-  text: {
-    fontSize: 48, // Duży napis "HOME"
-    fontWeight: "bold",
+  loggedInContainer: {
+    width: "80%",
+    alignItems: "center",
+  },
+  label: {
+    fontSize: 18,
+    marginBottom: 10,
+  },
+  input: {
+    width: "100%",
+    height: 40,
+    borderColor: "gray",
+    borderWidth: 1,
+    marginBottom: 10,
+    paddingHorizontal: 8,
+  },
+  buttonContainer: {
+    marginTop: 10,
+    width: "100%",
+    gap: 10,
   },
 });
