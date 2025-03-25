@@ -35,8 +35,8 @@ export default function HomeScreen() {
           />
           {nickname.trim().length > 0 && (
             <View style={styles.buttonContainer}>
-              <Button title="Utwórz grę" onPress={() => router.push('/createGame')} />
-              <Button title="Dołącz do gry" onPress={() => router.push('/joinGame')} />
+              <Button title="Utwórz grę" onPress={() => router.push({ pathname: '/createRoom', params: { nickname } })} />
+              <Button title="Dołącz do gry" onPress={() => router.push({ pathname: '/joinRoom', params: { nickname } })} />
             </View>
           )}
         </View>
