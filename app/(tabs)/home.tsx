@@ -1,30 +1,24 @@
 import { View, Text, StyleSheet } from "react-native";
-import React, { useState } from "react";
-import { TextInput, Button, Alert } from "react-native";
+import React, { useEffect } from "react";
+import * as SecureStore from 'expo-secure-store';
 
-export default function LoginScreen() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+export default function HomeScreen() {
+  useEffect(() => {
+    const fetchToken = async () => {
+      const token = await SecureStore.getItemAsync('token');
+      if (token) {
+        console.log("Token:", token);
+      } else {
+        console.log("Brak tokena.");
+      }
+    };
+
+    fetchToken();
+  }, []);
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Login</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Username"
-        value={username}
-        onChangeText={setUsername}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        secureTextEntry
-        value={password}
-        onChangeText={setPassword}
-      />
-      <Button
-        title="Login"
-      />
+      <Text style={styles.text}>HOME</Text>
     </View>
   );
 }
@@ -36,15 +30,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   text: {
-    fontSize: 20,
+    fontSize: 48, // Duży napis "HOME"
     fontWeight: "bold",
-  },
-  input: {
-    width: "80%",
-    height: 40,
-    borderColor: "gray",
-    borderWidth: 1,
-    marginBottom: 10,
-    paddingHorizontal: 8,
   },
 });

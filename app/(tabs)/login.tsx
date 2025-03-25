@@ -1,35 +1,39 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Alert, TextInput, Button } from "react-native";
 import React, { useState } from "react";
-import { TextInput, Button, Alert } from "react-native";
 import { useRouter } from 'expo-router';
-
-
+import * as SecureStore from 'expo-secure-store';  // Bezpieczne przechowywanie tokena
 
 export default function LoginScreen() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const router = useRouter(); // Używamy routera do nawigacji
+  const router = useRouter(); 
 
-  function handleLogin(email: string, password: string) {
-    fetch("http://212.127.78.90:3000/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    })
-      .then((response) => {
-        if (response.ok) {
-          Alert.alert("Success", "Login successful!");
-          console.log("YUPIII!")
-          router.push('/home');
-        } else {
-          Alert.alert("Error", "Login failed. Please check your credentials.");
-        }
-      })
-      .catch((error) => {
-        Alert.alert("Error", "An error occurred: " + error.message);
+  async function saveToken(token) {
+    await SecureStore.setItemAsync('userToken', token);  // Przechowywanie tokena
+  }
+
+  async function handleLogin(email, password) {
+    try {
+      const response = await fetch("http://212.127.78.90:3000/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
       });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        await saveToken(data.token); // Zapisz token
+        Alert.alert("Success", "Login successful!");
+        router.push('/home');
+      } else {
+        Alert.alert("Error", data.error || "Login failed.");
+      }
+    } catch (error) {
+      Alert.alert("Error", "An error occurred: " + error.message);
+    }
   }
 
   return (
