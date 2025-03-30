@@ -1,16 +1,12 @@
 import { View, Text, StyleSheet, Alert, TextInput, Button } from "react-native";
 import React, { useState } from "react";
 import { useRouter } from 'expo-router';
-import * as SecureStore from 'expo-secure-store';  // Bezpieczne przechowywanie tokena
+import { saveToken } from "../tokenManager";
 
 export default function LoginScreen() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter(); 
-
-  async function saveToken(token) {
-    await SecureStore.setItemAsync('userToken', token);  // Przechowywanie tokena
-  }
 
   async function handleLogin(email, password) {
     try {

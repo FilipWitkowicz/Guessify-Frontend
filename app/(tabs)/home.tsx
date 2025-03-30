@@ -2,6 +2,7 @@ import { View, Text, StyleSheet, TextInput, Button } from "react-native";
 import React, { useEffect, useState } from "react";
 import * as SecureStore from 'expo-secure-store';
 import { useRouter } from 'expo-router';
+import { getToken } from "../tokenManager"; 
 
 export default function HomeScreen() {
   const [token, setToken] = useState(null);
@@ -10,17 +11,12 @@ export default function HomeScreen() {
 
   useEffect(() => {
     const fetchToken = async () => {
-      const storedToken = await SecureStore.getItemAsync('userToken');
-      if (storedToken) {
-        console.log("Token:", storedToken);
-        setToken(storedToken);
-      } else {
-        console.log("Brak tokena.");
-      }
+      const storedToken = await getToken();
+      setToken(storedToken);
     };
-
     fetchToken();
   }, []);
+
 
   return (
     <View style={styles.container}>
