@@ -1,18 +1,21 @@
 import { View, Text, StyleSheet, Button } from "react-native";
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import React from "react";
 import { getToken } from "../tokenManager";
 
 const players = ["Fiflon", "Piotr", "Marco", "Filip"];
 
 export default function ChoosePlayerScreen() {
+const { roomId, nickname } = useLocalSearchParams();
+
   const handleSelectPlayer = (player) => {
     router.push({ pathname: "/game", params: { player } });
   };
+  // post get-room-players, z parametrami roomId i token i gracza i nickname
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Wybierz gracza:</Text>
+      <Text style={styles.title}> {nickname}Wybierz gracza:</Text>
       {players.map((player) => (
         <View key={player} style={styles.buttonContainer}>
           <Button title={player} onPress={() => handleSelectPlayer(player)} />

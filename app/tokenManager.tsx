@@ -1,3 +1,4 @@
+import React from 'react';
 import * as SecureStore from 'expo-secure-store';
 
 // Zapisuje token w SecureStore
@@ -14,3 +15,10 @@ export async function getToken(): Promise<string | null> {
 export async function removeToken() {
     await SecureStore.deleteItemAsync('userToken');
 }
+
+// Dummy React component as default export
+const TokenManager = () => {
+    return null;
+};
+
+export default TokenManager;

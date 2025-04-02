@@ -36,16 +36,17 @@ export default function CreateRoomScreen() {
       });
 
       const data = await response.json();
-
+      // console.log(data); 
+      const roomId = data.roomId; 
       if (response.ok) {
         Alert.alert("Sukces", "Pokój został utworzony!");
+        router.push({ pathname: '/choosePlayer', params: { roomId, nickname } });  // tutaj przekazac id pokoju i na jakim uzytkowniku jestes zalogowany
       } else {
         Alert.alert("Błąd", data.error || "Nie udało się utworzyć pokoju.");
       }
     } catch (error) {
       Alert.alert("Błąd", "Wystąpił problem: " + error.message);
     }
-    router.push('/choosePlayer'); // tutaj przekazac id pokoju i na jakim uzytkowniku jestes zalogowany
   };
   return (
     <View style={styles.container}>
