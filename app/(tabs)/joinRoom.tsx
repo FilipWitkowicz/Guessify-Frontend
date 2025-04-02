@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, TextInput, Button, Alert } from "react-native";
-import { useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import React, { useState, useEffect } from "react";
 import { getToken } from "../tokenManager"; // Importujemy funkcję getToken
 
@@ -47,6 +47,7 @@ export default function CreateRoomScreen() {
     } catch (error) {
       Alert.alert("Błąd", "Wystąpił problem: " + error.message);
     }
+    router.push('/choosePlayer'); // tutaj przekazac id pokoju i na jakim uzytkowniku jestes zalogowany
   };
 
   return (
