@@ -5,7 +5,7 @@ import { getToken } from "../tokenManager"; // Importujemy funkcję getToken
 
 export default function CreateRoomScreen() {
   const { nickname } = useLocalSearchParams(); // Odbieramy przekazany pseudonim
-  const [roomCode, setroomCode] = useState(""); // Stan dla linku do playlisty
+  const [roomId, setroomId] = useState(""); // Stan dla linku do playlisty
   const [token, setToken] = useState(null);
 
 
@@ -19,35 +19,7 @@ export default function CreateRoomScreen() {
 
 
   const handleCreateRoom = async () => {
-    if (!roomCode.trim()) {
-      Alert.alert("Błąd", "Podaj poprawny link do playlisty.");
-      return;
-    }
-
-    try {
-      const response = await fetch("http://212.127.78.90:3000/create-room", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`, // Dodajemy token do nagłówków
-        },
-        body: JSON.stringify({
-          nickname: nickname,
-          playlist: roomCode,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        Alert.alert("Sukces", "Pokój został utworzony!");
-      } else {
-        Alert.alert("Błąd", data.error || "Nie udało się utworzyć pokoju.");
-      }
-    } catch (error) {
-      Alert.alert("Błąd", "Wystąpił problem: " + error.message);
-    }
-    router.push('/choosePlayer'); // tutaj przekazac id pokoju i na jakim uzytkowniku jestes zalogowany
+     router.push({ pathname: '/choosePlayer', params: { roomId, nickname } });
   };
 
   return (
@@ -56,8 +28,8 @@ export default function CreateRoomScreen() {
       <TextInput
         style={styles.input}
         placeholder="Podaj kod pokoju"
-        value={roomCode}
-        onChangeText={setroomCode}
+        value={roomId}
+        onChangeText={setroomId}
       />
       <Button title="Dołącz do pokoju" onPress={handleCreateRoom} />
     </View>
