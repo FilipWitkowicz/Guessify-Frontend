@@ -58,21 +58,26 @@ const handleSelectPlayer = (selectedPlayer) => {
       });
 
       if (!response.ok) {
-        console.error("Failed to update user room name:", response.statusText);
-        throw new Error("Failed to update user room name");
+        if (response.status === 500) {
+          alert("Ten użytkownik jest już przypisany.");
+        } else {
+          console.error("Failed to update user room name:", response.statusText);
+          throw new Error("Failed to update user room name");
+        }
+        return;
       }
 
       console.log("User room name updated successfully");
+      router.push({
+        pathname: "/preGame",
+        params: { roomId, nickname },
+      });
     } catch (error) {
       console.error("Error updating user room name:", error);
     }
   };
 
   updateUserRoomName();
-  router.push({
-    pathname: "/preGame",
-    params: { roomId, nickname },
-  });
 };
 
 return (

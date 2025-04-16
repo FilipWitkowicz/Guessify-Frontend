@@ -22,7 +22,6 @@ export default function LoginScreen() {
 
       if (response.ok) {
         await saveToken(data.token); // Zapisz token
-        Alert.alert("Success", "Login successful!");
         router.push('/home');
       } else {
         Alert.alert("Error", data.error || "Login failed.");
