@@ -46,8 +46,11 @@ export default function PreGameScreen() {
       <Text style={styles.title}>Pre-Game Screen</Text>
       <Text style={styles.text}>Room ID: {roomId}</Text>
       <Text style={styles.text}>Nickname: {nickname}</Text>
-      <Text style={styles.text}>User ID: {userId}</Text> {/* Display the extracted user_id */}
+      <Text style={styles.text}>User ID: {userId}</Text>
 
+      
+      
+      
       <Text style={styles.playersTitle}>Gracze:</Text>
       <FlatList
         data={players}
