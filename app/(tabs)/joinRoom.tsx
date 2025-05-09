@@ -18,7 +18,7 @@ export default function CreateRoomScreen() {
   }, []);
 
 
-  const handleCreateRoom = async () => {
+  const handleJoinRoom = async () => {
      router.push({ pathname: '/choosePlayer', params: { roomId, nickname } });
   };
 
@@ -31,7 +31,7 @@ export default function CreateRoomScreen() {
         value={roomId}
         onChangeText={setroomId}
       />
-      <Button title="Dołącz do pokoju" onPress={handleCreateRoom} />
+      <Button title="Dołącz do pokoju" onPress={handleJoinRoom} />
     </View>
   );
 }
