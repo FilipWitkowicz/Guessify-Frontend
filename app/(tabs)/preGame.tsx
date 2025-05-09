@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, FlatList } from "react-native";
+import { View, Text, StyleSheet, FlatList, Button } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import React from "react";
 import { io } from "socket.io-client";
@@ -7,7 +7,7 @@ import { jwtDecode } from "jwt-decode"; // Import jwt-decode
 
 export default function PreGameScreen() {
   const { roomId, nickname } = useLocalSearchParams();
-  const [players, setPlayers] = React.useState<string[]>([]); // lista graczy
+  const [players, setPlayers] = React.useState<any[]>([]); // lista graczy
   const [userId, setUserId] = React.useState<string | null>(null); // user_id extracted from token
 
   React.useEffect(() => {
@@ -31,7 +31,7 @@ export default function PreGameScreen() {
     console.log("Socket connected to room:", roomId);
     alert(`Connected to room: ${roomId}`);
 
-    socket.on("roomUsers", (userList: string[]) => {
+    socket.on("roomUsers", (userList: any[]) => {
       console.log("Otrzymano listę graczy:", userList);
       setPlayers(userList);
     });
@@ -48,15 +48,21 @@ export default function PreGameScreen() {
       <Text style={styles.text}>Nickname: {nickname}</Text>
       <Text style={styles.text}>User ID: {userId}</Text>
 
-      
-      
-      
       <Text style={styles.playersTitle}>Gracze:</Text>
       <FlatList
         data={players}
-        keyExtractor={(item, index) => `${item}-${index}`}
-        renderItem={({ item }) => <Text style={styles.player}>{item}</Text>}
+        keyExtractor={(item) => item.id_user.toString()} // Używamy id_user jako klucza
+        renderItem={({ item }) => (
+          <Text style={styles.player}>
+            {item.user_room_name} {item.is_admin ? "(Admin)" : ""}
+          </Text>
+        )}
       />
+      {players.some((player) => player.id_user === userId && player.is_admin) && (
+        <View style={styles.buttonContainer}>
+          <Button title="Rozpocznij grę" onPress={() => alert("Gra rozpoczęta!")} />
+        </View>
+      )}
     </View>
   );
 }
@@ -87,5 +93,9 @@ const styles = StyleSheet.create({
   player: {
     fontSize: 16,
     padding: 5,
+  },
+  buttonContainer: {
+    marginTop: 20,
+    width: "80%",
   },
 });
