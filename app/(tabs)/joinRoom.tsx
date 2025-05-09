@@ -28,7 +28,8 @@ export default function CreateRoomScreen() {
         },
         body: JSON.stringify({ roomId, nickname }),
       });
-  
+      
+      console.log("Response status:", response.status); // Debugging line
       if (response.status === 200) {
         // Jeśli status 200, przekieruj na ekran choosePlayer
         router.push({ pathname: "/choosePlayer", params: { roomId, nickname } });
