@@ -19,7 +19,29 @@ export default function CreateRoomScreen() {
 
 
   const handleJoinRoom = async () => {
-     router.push({ pathname: '/choosePlayer', params: { roomId, nickname } });
+    try {
+      const response = await fetch("http://212.127.78.90:3000/join-room", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, 
+        },
+        body: JSON.stringify({ roomId, nickname }),
+      });
+  
+      if (response.status === 200) {
+        // Jeśli status 200, przekieruj na ekran choosePlayer
+        router.push({ pathname: "/choosePlayer", params: { roomId, nickname } });
+      } else {
+        // Jeśli status inny niż 200, wyświetl błąd
+        const errorData = await response.json();
+        Alert.alert("Błąd", errorData.message || "Nie udało się dołączyć do pokoju.");
+      }
+    } catch (error) {
+      // Obsługa błędów sieciowych
+      Alert.alert("Błąd", "Wystąpił problem z połączeniem z serwerem.");
+      console.error("Error joining room:", error);
+    }
   };
 
   return (
