@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, FlatList, Button } from "react-native";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import React from "react";
-import { io } from "socket.io-client";
+import { getSocket } from "../socket";
 import { getToken } from "../tokenManager";
 import { jwtDecode } from "jwt-decode"; // Import jwt-decode
 
@@ -9,6 +9,7 @@ export default function PreGameScreen() {
   const { roomId, nickname } = useLocalSearchParams();
   const [players, setPlayers] = React.useState<any[]>([]); // lista graczy
   const [userId, setUserId] = React.useState<string | null>(null); // user_id extracted from token
+  const router = useRouter();
 
   React.useEffect(() => {
     const fetchUserId = async () => {
@@ -25,21 +26,33 @@ export default function PreGameScreen() {
 
     fetchUserId();
 
-    const socket = io("http://212.127.78.90:3000");
-
+    const socket = getSocket();
     socket.emit("joinRoom", roomId);
     console.log("Socket connected to room:", roomId);
-    alert(`Connected to room: ${roomId}`);
 
     socket.on("roomUsers", (userList: any[]) => {
       console.log("Otrzymano listę graczy:", userList);
       setPlayers(userList);
     });
 
+    socket.on("game_start", () => {
+      router.push({ pathname: "/game", params: { roomId, nickname } });
+      console.log("Gra rozpoczęta, przekierowanie do ekranu gry");
+    });
+
     return () => {
-      socket.disconnect();
+      socket.off("roomUsers");
+      socket.off("game_start");
     };
-  }, [roomId]);
+  }, [roomId, nickname]);
+
+  // Funkcja do wysyłania eventu admin-game-start
+  const handleStartGame = () => {
+    const socket = getSocket();
+    console.log("Socket ID:", socket.id);
+    socket.emit("admin-game-start", roomId);
+    console.log("Wysłano event admin-game-start do pokoju:", roomId);
+  };
 
   return (
     <View style={styles.container}>
@@ -60,7 +73,7 @@ export default function PreGameScreen() {
       />
       {players.some((player) => player.id_user === userId && player.is_admin) && (
         <View style={styles.buttonContainer}>
-          <Button title="Rozpocznij grę" onPress={() => alert("Gra rozpoczęta!")} />
+          <Button title="Rozpocznij grę" onPress={handleStartGame} />
         </View>
       )}
     </View>
