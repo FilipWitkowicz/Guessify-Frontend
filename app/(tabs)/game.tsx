@@ -1,14 +1,19 @@
-import { View, Text, StyleSheet, Button } from "react-native";
+import { View, Text, StyleSheet, Button, TouchableOpacity } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import React from "react";
 import { getSocket } from "../socket";
 import { useFocusEffect } from "@react-navigation/native";
+import { getToken } from "../tokenManager";
+import { jwtDecode } from "jwt-decode";
 
 export default function GameScreen() {
   const { roomId, nickname } = useLocalSearchParams();
   const [ownerId, setOwnerId] = React.useState<string | number | null>(null);
   const [round, setRound] = React.useState<number | null>(null);
   const [users, setUsers] = React.useState<Record<string, number>>({});
+  const [selectedUser, setSelectedUser] = React.useState<string | null>(null);
+  const [userId, setUserId] = React.useState<string | number | null>(null);
+  const [isConfirmed, setIsConfirmed] = React.useState(false);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -33,15 +38,66 @@ export default function GameScreen() {
     }, [roomId])
   );
 
+  React.useEffect(() => {
+    const fetchUserId = async () => {
+      try {
+        const token = await getToken();
+        if (token) {
+          const decoded: any = jwtDecode(token);
+          setUserId(decoded.id);
+        }
+      } catch (error) {
+        console.error("Error decoding token:", error);
+      }
+    };
+    fetchUserId();
+  }, []);
+
+  const handleSelectUser = (user: string) => {
+    if (!isConfirmed) {
+      setSelectedUser(user);
+    }
+  };
+
+  const handleConfirm = () => {
+    const socket = getSocket();
+    if (selectedUser) {
+      socket.emit("select-choice", { roomId, selectedUser, userId });
+      console.log("Wysłano select-choice:", { roomId, selectedUser, userId });
+      setIsConfirmed(true); // blokuj dalsze wybory
+    }
+  };
+
+  const handleNextRound = () => {
+    const socket = getSocket();
+    socket.emit("next-round", roomId);
+
+    //socket.on
+    //sprawdzenie czy odpowiedz byla poprawna
+    //animacja
+    //redirect
+
+
+
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.round}>Runda: {round}</Text>
       <Text style={styles.text}>Kto dodał to na playliste</Text>
       <View style={styles.buttonsContainer}>
         {Object.entries(users).map(([user]) => (
-          <View key={user} style={styles.userBlock}>
-            <Button title={user} onPress={() => console.log(`Kliknięto: ${user}`)} color="#1976D2" />
-          </View>
+          <TouchableOpacity
+            key={user}
+            style={[
+              styles.userButton,
+              selectedUser === user && styles.userButtonSelected,
+            ]}
+            onPress={() => handleSelectUser(user)}
+            activeOpacity={0.7}
+          >
+            <Text style={styles.userButtonText}>{user}</Text>
+          </TouchableOpacity>
         ))}
       </View>
       <View style={styles.pointsContainer}>
@@ -49,6 +105,22 @@ export default function GameScreen() {
           <Text key={user} style={styles.points}>{user}: {points} pkt</Text>
         ))}
       </View>
+      <TouchableOpacity
+        style={[
+          styles.confirmButton,
+          selectedUser ? styles.confirmButtonActive : styles.confirmButtonDisabled,
+        ]}
+        onPress={handleConfirm}
+        disabled={!selectedUser || isConfirmed}
+        activeOpacity={0.8}
+      >
+        <Text style={styles.confirmButtonText}>Zatwierdź</Text>
+      </TouchableOpacity>
+      {userId && ownerId && userId.toString() === ownerId.toString() && (
+        <View style={styles.buttonContainer}>
+          <Button title="Przejdź do następnej rundy" onPress={handleNextRound} />
+        </View>
+      )}
     </View>
   );
 }
@@ -77,13 +149,44 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginBottom: 30,
-    marginTop: 40, // przesunięcie guzików niżej
+    marginTop: 40,
   },
-  userBlock: {
+  userButton: {
     width: "90%",
-    marginBottom: 22,
+    paddingVertical: 18,
+    backgroundColor: "#1976D2",
+    borderRadius: 12,
+    marginBottom: 18,
     alignItems: "center",
-    // powiększenie przycisku przez styl wrappera
+    borderWidth: 2,
+    borderColor: "#1976D2",
+  },
+  userButtonSelected: {
+    backgroundColor: "#1565C0",
+    borderColor: "#FFD600",
+  },
+  userButtonText: {
+    color: "#fff",
+    fontSize: 22,
+    fontWeight: "bold",
+  },
+  confirmButton: {
+    marginTop: 30,
+    width: "70%",
+    paddingVertical: 16,
+    borderRadius: 12,
+    alignItems: "center",
+  },
+  confirmButtonActive: {
+    backgroundColor: "#43A047",
+  },
+  confirmButtonDisabled: {
+    backgroundColor: "#BDBDBD",
+  },
+  confirmButtonText: {
+    color: "#fff",
+    fontSize: 20,
+    fontWeight: "bold",
   },
   pointsContainer: {
     width: "100%",
@@ -96,5 +199,9 @@ const styles = StyleSheet.create({
     marginVertical: 2,
     fontWeight: "bold",
     textAlign: "center",
+  },
+  buttonContainer: {
+    marginTop: 20,
+    width: "70%",
   },
 });
