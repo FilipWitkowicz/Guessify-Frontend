@@ -1,10 +1,11 @@
 import { View, Text, StyleSheet, Button, TouchableOpacity } from "react-native";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import React from "react";
 import { getSocket } from "../socket";
 import { useFocusEffect } from "@react-navigation/native";
 import { getToken } from "../tokenManager";
 import { jwtDecode } from "jwt-decode";
+
 
 export default function GameScreen() {
   const { roomId, nickname } = useLocalSearchParams();
@@ -70,14 +71,15 @@ export default function GameScreen() {
 
   const handleNextRound = () => {
     const socket = getSocket();
-    socket.emit("next-round", roomId);
+    socket.emit("check-asnwers", roomId);
 
-    //socket.on
-    //sprawdzenie czy odpowiedz byla poprawna
-    //animacja
-    //redirect
+    socket.on("next-round", () => {
+      console.log("Otrzymano wiadomość next-round na socket!");
+      //sprawdzenie czy odpowiedz byla poprawna
+      //animacja
 
-
+      router.push({ pathname: "/game", params: { roomId, nickname } });
+    });
 
   };
 

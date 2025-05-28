@@ -30,6 +30,7 @@ React.useEffect(() => {
 
       const data = await response.json();
       if (Array.isArray(data)) {
+        console.log("Fetched players:", data);
         setPlayers(data);
       } else {
         console.error("Invalid players data:", data);
