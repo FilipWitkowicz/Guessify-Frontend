@@ -37,9 +37,7 @@ export default function GameScreen() {
         socket.off("round-info-answer", handleRoundInfo);
       };
     }, [roomId])
-  );
-
-  React.useEffect(() => {
+  );  React.useEffect(() => {
     const fetchUserId = async () => {
       try {
         const token = await getToken();
@@ -52,7 +50,22 @@ export default function GameScreen() {
       }
     };
     fetchUserId();
-  }, []);
+
+    const socket = getSocket();
+    
+    const handleNextRound = (result: any) => {
+      console.log("Wynik sprawdzenia odpowiedzi:", result);
+      //sprawdzenie czy odpowiedz byla poprawna
+      //animacja
+      router.push({ pathname: "/game", params: { roomId, nickname } });
+    };
+
+    socket.on("next-round", handleNextRound);
+
+    return () => {
+      socket.off("next-round", handleNextRound);
+    };
+  }, [roomId, nickname]);
 
   const handleSelectUser = (user: string) => {
     if (!isConfirmed) {
@@ -68,19 +81,10 @@ export default function GameScreen() {
       setIsConfirmed(true); // blokuj dalsze wybory
     }
   };
-
   const handleNextRound = () => {
     const socket = getSocket();
-    socket.emit("check-asnwers", roomId);
-
-    socket.on("next-round", () => {
-      console.log("Otrzymano wiadomość next-round na socket!");
-      //sprawdzenie czy odpowiedz byla poprawna
-      //animacja
-
-      router.push({ pathname: "/game", params: { roomId, nickname } });
-    });
-
+    socket.emit("check-answers", roomId);
+    console.log("Wysłano check-asnwers:", roomId);    
   };
 
   return (
