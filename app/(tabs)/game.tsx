@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Button, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, Button, TouchableOpacity, Animated, Alert, Image } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import React from "react";
 import { getSocket } from "../socket";
@@ -11,10 +11,11 @@ export default function GameScreen() {
   const { roomId, nickname } = useLocalSearchParams();
   const [ownerId, setOwnerId] = React.useState<string | number | null>(null);
   const [round, setRound] = React.useState<number | null>(null);
-  const [users, setUsers] = React.useState<Record<string, number>>({});
-  const [selectedUser, setSelectedUser] = React.useState<string | null>(null);
-  const [userId, setUserId] = React.useState<string | number | null>(null);
-  const [isConfirmed, setIsConfirmed] = React.useState(false);
+  const [users, setUsers] = React.useState<Record<string, number>>({});  const [selectedUser, setSelectedUser] = React.useState<string | null>(null);
+  const [userId, setUserId] = React.useState<string | number | null>(null);  const [isConfirmed, setIsConfirmed] = React.useState(false);  const [fadeAnim] = React.useState(new Animated.Value(1));
+  const [scaleAnim] = React.useState(new Animated.Value(1));
+  const [showSuccessImage, setShowSuccessImage] = React.useState(false);
+  const [showFailImage, setShowFailImage] = React.useState(false);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -51,13 +52,102 @@ export default function GameScreen() {
     };
     fetchUserId();
 
-    const socket = getSocket();
-    
-    const handleNextRound = (result: any) => {
+    const socket = getSocket();      const handleNextRound = (result: any) => {
       console.log("Wynik sprawdzenia odpowiedzi:", result);
-      //sprawdzenie czy odpowiedz byla poprawna
-      //animacja
-      router.push({ pathname: "/game", params: { roomId, nickname } });
+      
+      // Sprawdź czy result nie jest pustą tablicą
+      if (!result || result.length === 0) {
+        console.log("Brak wyników, przechodzę do następnej rundy");
+        setTimeout(() => {
+          router.replace({ pathname: "/game", params: { roomId, nickname } });
+        }, 1000);
+        return;
+      }
+      
+      // Sprawdź czy użytkownik miał poprawną odpowiedź
+      const userResult = result.find((item: any) => item.id_guesser === userId);
+      const isCorrect = userResult && userResult.user_spotify_name === userResult.correct_spotify_name;
+        if (isCorrect) {
+        // Pokaż obrazek sukcesu na 2 sekundy
+        setShowSuccessImage(true);
+        
+        // Ukryj obrazek po 2 sekundach
+        setTimeout(() => {
+          setShowSuccessImage(false);
+        }, 2000);
+        
+        // Animacja pulsowania
+        Animated.sequence([
+          Animated.parallel([
+            Animated.timing(scaleAnim, {
+              toValue: 1.2,
+              duration: 300,
+              useNativeDriver: true,
+            }),
+            Animated.timing(fadeAnim, {
+              toValue: 0.8,
+              duration: 300,
+              useNativeDriver: true,
+            })
+          ]),
+          Animated.parallel([
+            Animated.timing(scaleAnim, {
+              toValue: 1,
+              duration: 300,
+              useNativeDriver: true,
+            }),
+            Animated.timing(fadeAnim, {
+              toValue: 1,
+              duration: 300,
+              useNativeDriver: true,
+            })
+          ])
+        ]).start(() => {          // Po animacji przejdź na następny ekran
+          setTimeout(() => {
+            router.replace({ pathname: "/game", params: { roomId, nickname } });
+          }, 500);        });
+      } else {
+        // Pokaż obrazek niepowodzenia na 2 sekundy
+        setShowFailImage(true);
+        
+        // Ukryj obrazek po 2 sekundach
+        setTimeout(() => {
+          setShowFailImage(false);
+        }, 2000);
+        
+        // Animacja pulsowania dla błędnej odpowiedzi
+        Animated.sequence([
+          Animated.parallel([
+            Animated.timing(scaleAnim, {
+              toValue: 1.2,
+              duration: 300,
+              useNativeDriver: true,
+            }),
+            Animated.timing(fadeAnim, {
+              toValue: 0.8,
+              duration: 300,
+              useNativeDriver: true,
+            })
+          ]),
+          Animated.parallel([
+            Animated.timing(scaleAnim, {
+              toValue: 1,
+              duration: 300,
+              useNativeDriver: true,
+            }),
+            Animated.timing(fadeAnim, {
+              toValue: 1,
+              duration: 300,
+              useNativeDriver: true,
+            })
+          ])
+        ]).start(() => {
+          // Po animacji przejdź na następny ekran
+          setTimeout(() => {
+            router.replace({ pathname: "/game", params: { roomId, nickname } });
+          }, 500);
+        });
+      }
     };
 
     socket.on("next-round", handleNextRound);
@@ -65,7 +155,7 @@ export default function GameScreen() {
     return () => {
       socket.off("next-round", handleNextRound);
     };
-  }, [roomId, nickname]);
+  }, [roomId, nickname, userId, fadeAnim, scaleAnim, router]);
 
   const handleSelectUser = (user: string) => {
     if (!isConfirmed) {
@@ -86,9 +176,16 @@ export default function GameScreen() {
     socket.emit("check-answers", roomId);
     console.log("Wysłano check-asnwers:", roomId);    
   };
-
   return (
-    <View style={styles.container}>
+    <Animated.View 
+      style={[
+        styles.container,
+        {
+          opacity: fadeAnim,
+          transform: [{ scale: scaleAnim }]
+        }
+      ]}
+    >
       <Text style={styles.round}>Runda: {round}</Text>
       <Text style={styles.text}>Kto dodał to na playliste</Text>
       <View style={styles.buttonsContainer}>
@@ -127,7 +224,27 @@ export default function GameScreen() {
           <Button title="Przejdź do następnej rundy" onPress={handleNextRound} />
         </View>
       )}
-    </View>
+      {/* Obrazek sukcesu */}
+      {showSuccessImage && (
+        <View style={styles.successOverlay}>
+          <Image 
+            source={require('../../assets/images/success-checkmark.png')} 
+            style={styles.successImage}
+            resizeMode="contain"
+          />
+        </View>
+      )}
+      {/* Obrazek niepowodzenia */}
+      {showFailImage && (
+        <View style={styles.failOverlay}>
+          <Image 
+            source={require('../../assets/images/fail-checkmark.png')} 
+            style={styles.failImage}
+            resizeMode="contain"
+          />
+        </View>
+      )}
+    </Animated.View>
   );
 }
 
@@ -205,9 +322,37 @@ const styles = StyleSheet.create({
     marginVertical: 2,
     fontWeight: "bold",
     textAlign: "center",
-  },
-  buttonContainer: {
+  },  buttonContainer: {
     marginTop: 20,
     width: "70%",
+  },
+  successOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 1000,
+  },  successImage: {
+    width: 150,
+    height: 150,
+  },
+  failOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(255, 0, 0, 0.1)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 1000,
+  },
+  failImage: {
+    width: 150,
+    height: 150,
   },
 });
