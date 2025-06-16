@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TextInput, Button, Alert } from "react-native";
+import { View, Text, StyleSheet, TextInput, Button, Alert, Image, KeyboardAvoidingView, Platform } from "react-native";
 import React, { useState } from "react";
 import { useRouter } from 'expo-router';
 
@@ -29,7 +29,16 @@ export default function Page2Screen() {
   }
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView 
+      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
+    >
+      <Image 
+        source={require('../../assets/images/logo.png')} 
+        style={styles.logo} 
+        resizeMode="contain"
+      />
       <TextInput
         style={styles.input}
         placeholder="Username"
@@ -47,7 +56,7 @@ export default function Page2Screen() {
         title="Register"
         onPress={() => handleRegister(username, password)}
       />
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -56,6 +65,12 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    paddingTop: 50,
+  },
+  logo: {
+    width: 150,
+    height: 150,
+    marginBottom: 50,
   },
   text: {
     fontSize: 20,

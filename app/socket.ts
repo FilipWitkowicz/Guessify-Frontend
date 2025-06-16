@@ -8,3 +8,8 @@ export function getSocket() {
   }
   return socket;
 }
+
+
+module.exports = {
+  getSocket,
+};

@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TextInput, Button } from "react-native";
+import { View, Text, StyleSheet, TextInput, Button, Alert, KeyboardAvoidingView, Platform } from "react-native";
 import React, { useEffect, useState } from "react";
 import * as SecureStore from 'expo-secure-store';
 import { useRouter } from 'expo-router';
@@ -19,7 +19,11 @@ export default function HomeScreen() {
 
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView 
+      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
+    >
       {token ? (
         <View style={styles.loggedInContainer}>
           <Text style={styles.label}>Podaj swój pseudonim:</Text>
@@ -42,7 +46,7 @@ export default function HomeScreen() {
           <Button title="Zaloguj się" onPress={() => router.push('/login')} />
         </View>
       )}
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 

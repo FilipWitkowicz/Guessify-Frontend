@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Alert, TextInput, Button } from "react-native";
+import { View, Text, StyleSheet, TextInput, Button, Alert, Image, KeyboardAvoidingView, Platform } from "react-native";
 import React, { useState } from "react";
 import { useRouter } from 'expo-router';
 import { saveToken } from "../tokenManager";
@@ -32,7 +32,16 @@ export default function LoginScreen() {
   }
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView 
+      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
+    >
+      <Image 
+        source={require('../../assets/images/logo.png')} 
+        style={styles.logo} 
+        resizeMode="contain"
+      />
       <TextInput
         style={styles.input}
         placeholder="Username"
@@ -50,7 +59,7 @@ export default function LoginScreen() {
         title="Login"
         onPress={() => handleLogin(username, password)}
       />
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -71,5 +80,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 10,
     paddingHorizontal: 8,
+  },
+  logo: {
+    width: 150,
+    height: 150,
+    marginBottom: 50,
   },
 });

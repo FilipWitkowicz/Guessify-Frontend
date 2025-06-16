@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TextInput, Button, Alert } from "react-native";
+import { View, Text, StyleSheet, TextInput, Button, Alert,  KeyboardAvoidingView, Platform } from "react-native";
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useState, useEffect } from "react";
 import { getToken } from "../tokenManager";
@@ -39,7 +39,6 @@ export default function CreateRoomScreen() {
       // console.log(data); 
       const roomId = data.roomId; 
       if (response.ok) {
-        Alert.alert("Sukces", "Pokój został utworzony!");
         router.push({ pathname: '/choosePlayer', params: { roomId, nickname } });  // tutaj przekazac id pokoju i na jakim uzytkowniku jestes zalogowany
       } else {
         Alert.alert("Błąd", data.error || "Nie udało się utworzyć pokoju.");
@@ -49,7 +48,11 @@ export default function CreateRoomScreen() {
     }
   };
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView 
+          style={styles.container}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
+    >
       <Text style={styles.text}>Witaj, {nickname}!</Text>
       <TextInput
         style={styles.input}
@@ -58,7 +61,7 @@ export default function CreateRoomScreen() {
         onChangeText={setPlaylistLink}
       />
       <Button title="Utwórz pokój" onPress={handleCreateRoom} />
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 

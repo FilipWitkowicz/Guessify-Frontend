@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TextInput, Button, Alert } from "react-native";
+import { View, Text, StyleSheet, TextInput, Button, Alert, KeyboardAvoidingView, Platform } from "react-native";
 import { router, useLocalSearchParams } from 'expo-router';
 import React, { useState, useEffect } from "react";
 import { getToken } from "../tokenManager"; // Importujemy funkcję getToken
@@ -46,7 +46,11 @@ export default function CreateRoomScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView 
+      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
+    >
       <Text style={styles.text}>Witaj, {nickname}!</Text>
       <TextInput
         style={styles.input}
@@ -55,7 +59,7 @@ export default function CreateRoomScreen() {
         onChangeText={setroomId}
       />
       <Button title="Dołącz do pokoju" onPress={handleJoinRoom} />
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 

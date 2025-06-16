@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, FlatList, Button } from "react-native";
+import { View, Text, StyleSheet, FlatList, Button, KeyboardAvoidingView, Platform } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import React from "react";
 import { getSocket } from "../socket";
@@ -55,7 +55,11 @@ export default function PreGameScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView 
+      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
+    >
       <Text style={styles.title}>Pre-Game Screen</Text>
       <Text style={styles.text}>Room ID: {roomId}</Text>
       <Text style={styles.text}>Nickname: {nickname}</Text>
@@ -76,7 +80,7 @@ export default function PreGameScreen() {
           <Button title="Rozpocznij grę" onPress={handleStartGame} />
         </View>
       )}
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 
