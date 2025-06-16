@@ -56,6 +56,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
+    backgroundColor: "#000", // Czarny jako tło
   },
   loggedInContainer: {
     width: "80%",
@@ -64,11 +65,12 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 18,
     marginBottom: 10,
+    color: "#1ed760", // Zielony tekst
   },
   input: {
     width: "100%",
     height: 40,
-    borderColor: "gray",
+    borderColor: "#1ed760", // Zielony obramowanie
     borderWidth: 1,
     marginBottom: 10,
     paddingHorizontal: 8,

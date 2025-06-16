@@ -66,6 +66,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     paddingTop: 50,
+    backgroundColor: "#000", // Czarny jako tło
   },
   logo: {
     width: 150,
@@ -75,11 +76,12 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 20,
     fontWeight: "bold",
+    color: "#1ed760", // Zielony tekst
   },
   input: {
     width: "80%",
     height: 40,
-    borderColor: "gray",
+    borderColor: "#1ed760", // Zielony obramowanie
     borderWidth: 1,
     marginBottom: 10,
     paddingHorizontal: 8,

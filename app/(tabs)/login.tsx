@@ -68,15 +68,17 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "#000", // Czarny jako tło
   },
   text: {
     fontSize: 20,
     fontWeight: "bold",
+    color: "#1ed760", // Zielony tekst
   },
   input: {
     width: "80%",
     height: 40,
-    borderColor: "gray",
+    borderColor: "#1ed760", // Zielony obramowanie
     borderWidth: 1,
     marginBottom: 10,
     paddingHorizontal: 8,

@@ -182,13 +182,14 @@ export default function GameScreen() {
         styles.container,
         {
           opacity: fadeAnim,
-          transform: [{ scale: scaleAnim }]
+          transform: [{ scale: scaleAnim }],
+          backgroundColor: "#000", // Czarny jako tło
         }
       ]}
     >
-      <Text style={styles.round}>Runda: {round}</Text>
-      <Text style={styles.text}>Kto dodał to na playliste</Text>
-      <View style={styles.buttonsContainer}>
+      <Text style={[styles.round, { color: "#1ed760" }]}>Runda: {round}</Text>
+      <Text style={[styles.text, { color: "#1ed760" }]}>Kto dodał to na playliste</Text>
+      <View style={[styles.buttonsContainer, { borderColor: "#1ed760" }]}>
         {Object.entries(users).map(([user]) => (
           <TouchableOpacity
             key={user}
@@ -254,18 +255,20 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 20,
     paddingTop: 40,
-    backgroundColor: "#fff",
+    backgroundColor: "#000",
   },
   round: {
     fontSize: 28,
     fontWeight: "bold",
     marginBottom: 30,
     textAlign: "center",
+    color: "#1ed760",
   },
   text: {
     fontSize: 18,
     textAlign: "center",
     marginBottom: 20,
+    color: "#1ed760",
   },
   buttonsContainer: {
     width: "100%",
@@ -273,6 +276,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginBottom: 30,
     marginTop: 40,
+    borderColor: "#1ed760",
   },
   userButton: {
     width: "90%",
@@ -318,7 +322,7 @@ const styles = StyleSheet.create({
   },
   points: {
     fontSize: 20,
-    color: "#1976D2",
+    color: "#1ed760",
     marginVertical: 2,
     fontWeight: "bold",
     textAlign: "center",
