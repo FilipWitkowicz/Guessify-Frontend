@@ -33,11 +33,14 @@ export default function GameScreen() {
       };
 
       socket.on("round-info-answer", handleRoundInfo);
-
+      socket.on("finish-game", () => {
+        router.push({ pathname: "/postGame", params: { roomId, nickname } });
+      });
       return () => {
         socket.off("round-info-answer", handleRoundInfo);
+        socket.off("finish-game");
       };
-    }, [roomId])
+    }, [roomId, nickname])
   );  React.useEffect(() => {
     const fetchUserId = async () => {
       try {
