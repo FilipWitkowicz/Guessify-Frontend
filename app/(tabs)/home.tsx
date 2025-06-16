@@ -33,17 +33,15 @@ export default function HomeScreen() {
             value={nickname}
             onChangeText={setNickname}
           />
-          {nickname.trim().length > 0 && (
-            <View style={styles.buttonContainer}>
-              <Button title="Utwórz grę" onPress={() => router.push({ pathname: '/createRoom', params: { nickname } })} />
-              <Button title="Dołącz do gry" onPress={() => router.push({ pathname: '/joinRoom', params: { nickname } })} />
+          {nickname.trim().length > 0 && (            <View style={styles.buttonContainer}>
+              <Button title="Utwórz grę" onPress={() => router.push({ pathname: '/createRoom', params: { nickname } })} color="#1ed760" />
+              <Button title="Dołącz do gry" onPress={() => router.push({ pathname: '/joinRoom', params: { nickname } })} color="#1ed760" />
             </View>
           )}
         </View>
-      ) : (
-        <View>
-          <Text>Nie jesteś zalogowany!</Text>
-          <Button title="Zaloguj się" onPress={() => router.push('/login')} />
+      ) : (        <View>
+          <Text style={styles.notLoggedText}>Nie jesteś zalogowany!</Text>
+          <Button title="Zaloguj się" onPress={() => router.push('/login')} color="#1ed760" />
         </View>
       )}
     </KeyboardAvoidingView>
@@ -76,10 +74,15 @@ const styles = StyleSheet.create({
     color: "#fff", // Biały tekst w inpucie
     backgroundColor: "#1a1a1a", // Ciemne tło inputu
     borderRadius: 8,
-  },
-  buttonContainer: {
+  },  buttonContainer: {
     marginTop: 10,
     width: "100%",
     gap: 10,
+  },
+  notLoggedText: {
+    color: "#fff",
+    fontSize: 16,
+    marginBottom: 20,
+    textAlign: "center",
   },
 });

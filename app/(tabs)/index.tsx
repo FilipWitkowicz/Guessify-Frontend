@@ -7,14 +7,15 @@ export default function HomeScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.text}>Guessify</Text>
-      <View style={styles.buttonContainer}></View>
+      <View style={styles.buttonContainer}>
         <View style={styles.buttonWrapper}>
-          <Button title="Zaloguj się" onPress={() => router.push('/login')} />
+          <Button title="Zaloguj się" onPress={() => router.push('/login')} color="#1ed760" />
         </View>
         <View style={styles.buttonWrapper}>
-          <Button title="Zarejestruj się" onPress={() => router.push('/register')} />
+          <Button title="Zarejestruj się" onPress={() => router.push('/register')} color="#1ed760" />
         </View>
       </View>
+    </View>
   );
 }
 

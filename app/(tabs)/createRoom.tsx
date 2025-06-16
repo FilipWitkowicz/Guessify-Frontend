@@ -67,7 +67,7 @@ export default function CreateRoomScreen() {
         onChangeText={setPlaylistLink}
       />
       <Text style={styles.text}>UWAGA! Przed wklejeniem linku do playlisty na spotify pamiętaj o tym żeby ją przemieszać. Polecamy skorzystanie ze strony https://www.spotify-shuffler.com/</Text>
-      <Button title="Utwórz pokój" onPress={handleCreateRoom} />
+      <Button title="Utwórz pokój" onPress={handleCreateRoom} color="#1ed760" />
     </KeyboardAvoidingView>
   );
 }

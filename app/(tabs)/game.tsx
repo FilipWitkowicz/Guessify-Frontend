@@ -188,7 +188,7 @@ export default function GameScreen() {
       ]}
     >
       <Text style={[styles.round, { color: "#1ed760" }]}>Runda: {round}</Text>
-      <Text style={[styles.text, { color: "#1ed760" }]}>Kto dodał to na playliste</Text>
+      <Text style={[styles.text, { color: "#1ed760" }]}>Kto dodał to na playliste?</Text>
       <View style={[styles.buttonsContainer, { borderColor: "#1ed760" }]}>
         {Object.entries(users).map(([user]) => (
           <TouchableOpacity
@@ -222,7 +222,7 @@ export default function GameScreen() {
       </TouchableOpacity>
       {userId && ownerId && userId.toString() === ownerId.toString() && (
         <View style={styles.buttonContainer}>
-          <Button title="Przejdź do następnej rundy" onPress={handleNextRound} />
+          <Button title="Przejdź do następnej rundy" onPress={handleNextRound} color="#1ed760"/>
         </View>
       )}
       {/* Obrazek sukcesu */}
@@ -281,12 +281,12 @@ const styles = StyleSheet.create({
   userButton: {
     width: "90%",
     paddingVertical: 18,
-    backgroundColor: "#1976D2",
+    backgroundColor: "#1ed760",
     borderRadius: 12,
     marginBottom: 18,
     alignItems: "center",
     borderWidth: 2,
-    borderColor: "#1976D2",
+    borderColor: "#1ed760",
   },
   userButtonSelected: {
     backgroundColor: "#1565C0",

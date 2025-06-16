@@ -89,9 +89,8 @@ return (
   <View style={styles.container}>
     <Text style={styles.title}>{roomId} Wybierz gracza:</Text>
     {players.length > 0 ? (
-      players.map((player, index) => (
-        <View key={index} style={styles.buttonContainer}>
-          <Button title={player} onPress={() => handleSelectPlayer(player)} />
+      players.map((player, index) => (        <View key={index} style={styles.buttonContainer}>
+          <Button title={player} onPress={() => handleSelectPlayer(player)} color="#1ed760" />
         </View>
       ))    ) : (
       <Text style={styles.noPlayersText}>Brak dostępnych graczy.</Text>

@@ -55,6 +55,7 @@ export default function Page2Screen() {
       <Button
         title="Register"
         onPress={() => handleRegister(username, password)}
+        color="#1ed760"
       />
     </KeyboardAvoidingView>
   );

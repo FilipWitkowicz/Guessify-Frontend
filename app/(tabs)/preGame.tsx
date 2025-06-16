@@ -60,10 +60,6 @@ export default function PreGameScreen() {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       keyboardVerticalOffset={Platform.OS === 'ios' ? 64 : 0}
     >
-      <Text style={styles.title}>Pre-Game Screen</Text>
-      <Text style={styles.text}>Room ID: {roomId}</Text>
-      <Text style={styles.text}>Nickname: {nickname}</Text>
-      <Text style={styles.text}>User ID: {userId}</Text>
 
       <Text style={styles.playersTitle}>Gracze:</Text>
       <FlatList
@@ -75,9 +71,8 @@ export default function PreGameScreen() {
           </Text>
         )}
       />
-      {players.some((player) => player.id_user === userId && player.is_admin) && (
-        <View style={styles.buttonContainer}>
-          <Button title="Rozpocznij grę" onPress={handleStartGame} />
+      {players.some((player) => player.id_user === userId && player.is_admin) && (        <View style={styles.buttonContainer}>
+          <Button title="Rozpocznij grę" onPress={handleStartGame} color="#1ed760" />
         </View>
       )}
     </KeyboardAvoidingView>
@@ -123,9 +118,8 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     textAlign: "center",
     minWidth: 200,
-  },
-  buttonContainer: {
-    marginTop: 30,
+  },  buttonContainer: {
+    marginBottom: 30,
     width: "80%",
     borderRadius: 8,
     overflow: "hidden",

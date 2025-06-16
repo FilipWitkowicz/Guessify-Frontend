@@ -63,7 +63,7 @@ export default function CreateRoomScreen() {
         value={roomId}
         onChangeText={setroomId}
       />
-      <Button title="Dołącz do pokoju" onPress={handleJoinRoom} />
+      <Button title="Dołącz do pokoju" onPress={handleJoinRoom} color="#1ed760" />
     </KeyboardAvoidingView>
   );
 }

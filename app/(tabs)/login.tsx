@@ -58,6 +58,7 @@ export default function LoginScreen() {
       <Button
         title="Login"
         onPress={() => handleLogin(username, password)}
+        color="#1ed760"
       />
     </KeyboardAvoidingView>
   );
