@@ -212,7 +212,8 @@ export default function GameScreen() {
       <TouchableOpacity
         style={[
           styles.confirmButton,
-          selectedUser ? styles.confirmButtonActive : styles.confirmButtonDisabled,
+          selectedUser ? (isConfirmed ? styles.userButtonSelected : styles.confirmButtonActive) : styles.confirmButtonDisabled,
+          
         ]}
         onPress={handleConfirm}
         disabled={!selectedUser || isConfirmed}
@@ -289,7 +290,8 @@ const styles = StyleSheet.create({
     borderColor: "#1ed760",
   },
   userButtonSelected: {
-    backgroundColor: "#1565C0",
+    backgroundColor: "#0c662c",
+    borderWidth: 2,
     borderColor: "#FFD600",
   },
   userButtonText: {
