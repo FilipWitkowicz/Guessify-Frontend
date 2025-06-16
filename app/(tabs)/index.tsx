@@ -23,17 +23,25 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#000', // Czarne tło
+    padding: 20,
   },
   text: {
-    fontSize: 24, // Zwiększenie rozmiaru tekstu
-    marginBottom: 20,
+    fontSize: 32,
+    fontWeight: 'bold',
+    marginBottom: 40,
+    color: '#1ed760', // Zielony tekst
+    textAlign: 'center',
   },
   buttonContainer: {
     width: '100%',
     alignItems: 'center',
   },
   buttonWrapper: {
-    width: '80%', // Różna szerokość przycisków
-    marginVertical: 10, // Dodanie marginesu między przyciskami
+    width: '80%',
+    marginVertical: 15,
+    borderRadius: 8,
+    overflow: 'hidden',
+    backgroundColor: '#1ed760', // Zielone tło przycisków
   },
 });

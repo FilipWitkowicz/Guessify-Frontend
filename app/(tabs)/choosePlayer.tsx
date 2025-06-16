@@ -93,9 +93,8 @@ return (
         <View key={index} style={styles.buttonContainer}>
           <Button title={player} onPress={() => handleSelectPlayer(player)} />
         </View>
-      ))
-    ) : (
-      <Text>Brak dostępnych graczy.</Text>
+      ))    ) : (
+      <Text style={styles.noPlayersText}>Brak dostępnych graczy.</Text>
     )}
   </View>
 );
@@ -107,13 +106,33 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
+    backgroundColor: "#000", // Czarne tło
   },
   title: {
-    fontSize: 24,
-    marginBottom: 20,
+    fontSize: 28,
+    fontWeight: "bold",
+    marginBottom: 40,
+    color: "#1ed760", // Zielony tekst
+    textAlign: "center",
   },
   buttonContainer: {
-    marginBottom: 10,
+    marginBottom: 15,
     width: "80%",
+    borderRadius: 8,
+    overflow: "hidden",
+    backgroundColor: "#1ed760", // Zielone tło przycisków
+    shadowColor: "#1ed760",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  noPlayersText: {
+    fontSize: 18,
+    color: "#888", // Szary tekst dla komunikatu o braku graczy
+    fontStyle: "italic",
   },
 });

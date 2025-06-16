@@ -74,14 +74,16 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "bold",
     color: "#1ed760", // Zielony tekst
-  },
-  input: {
+  },  input: {
     width: "80%",
     height: 40,
     borderColor: "#1ed760", // Zielony obramowanie
     borderWidth: 1,
     marginBottom: 10,
     paddingHorizontal: 8,
+    color: "#fff", // Biały tekst w inpucie
+    backgroundColor: "#1a1a1a", // Ciemne tło inputu
+    borderRadius: 8,
   },
   logo: {
     width: 150,

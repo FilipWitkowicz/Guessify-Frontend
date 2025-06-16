@@ -66,14 +66,16 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginBottom: 10,
     color: "#1ed760", // Zielony tekst
-  },
-  input: {
+  },  input: {
     width: "100%",
     height: 40,
     borderColor: "#1ed760", // Zielony obramowanie
     borderWidth: 1,
     marginBottom: 10,
     paddingHorizontal: 8,
+    color: "#fff", // Biały tekst w inpucie
+    backgroundColor: "#1a1a1a", // Ciemne tło inputu
+    borderRadius: 8,
   },
   buttonContainer: {
     marginTop: 10,

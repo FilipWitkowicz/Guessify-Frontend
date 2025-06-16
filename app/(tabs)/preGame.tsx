@@ -91,28 +91,52 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 20,
     paddingTop: 50,
+    backgroundColor: "#000", // Czarne tło
   },
   title: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: "bold",
-    marginBottom: 20,
+    marginBottom: 30,
+    color: "#1ed760", // Zielony tekst
+    textAlign: "center",
   },
   text: {
     fontSize: 18,
-    marginBottom: 20,
+    marginBottom: 15,
+    color: "#fff", // Biały tekst
+    textAlign: "center",
   },
   playersTitle: {
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: "bold",
-    marginTop: 20,
-    marginBottom: 10,
+    marginTop: 30,
+    marginBottom: 20,
+    color: "#1ed760", // Zielony tekst
+    textAlign: "center",
   },
   player: {
     fontSize: 16,
-    padding: 5,
+    padding: 8,
+    marginVertical: 2,
+    color: "#fff", // Biały tekst
+    backgroundColor: "#1a1a1a", // Ciemne tło dla graczy
+    borderRadius: 6,
+    textAlign: "center",
+    minWidth: 200,
   },
   buttonContainer: {
-    marginTop: 20,
+    marginTop: 30,
     width: "80%",
+    borderRadius: 8,
+    overflow: "hidden",
+    backgroundColor: "#1ed760", // Zielone tło przycisku
+    shadowColor: "#1ed760",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.4,
+    shadowRadius: 4,
+    elevation: 5,
   },
 });

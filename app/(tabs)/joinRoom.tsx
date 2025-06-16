@@ -74,17 +74,25 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
+    backgroundColor: "#000", // Czarne tło
   },
   text: {
-    fontSize: 24,
-    marginBottom: 10,
+    fontSize: 28,
+    fontWeight: "bold",
+    marginBottom: 30,
+    color: "#1ed760", // Zielony tekst
+    textAlign: "center",
   },
   input: {
     width: "80%",
-    height: 40,
-    borderColor: "gray",
-    borderWidth: 1,
-    marginBottom: 10,
-    paddingHorizontal: 8,
+    height: 50,
+    borderColor: "#1ed760", // Zielone obramowanie
+    borderWidth: 2,
+    marginBottom: 30,
+    paddingHorizontal: 15,
+    borderRadius: 8,
+    backgroundColor: "#1a1a1a", // Ciemne tło inputu
+    color: "#fff", // Biały tekst w inpucie
+    fontSize: 16,
   },
 });
