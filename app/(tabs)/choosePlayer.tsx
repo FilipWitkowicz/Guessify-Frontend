@@ -59,7 +59,11 @@ const handleSelectPlayer = (selectedPlayer) => {
       });
 
       if (!response.ok) {
-        if (response.status === 500) {
+        if(response.status === 401 || response.status === 403) 
+        {
+          router.push({ pathname: '/index', params: {} });
+        }
+        else if (response.status === 500) {
           alert("Ten użytkownik jest już przypisany.");
         } else {
           console.error("Failed to update user room name:", response.statusText);

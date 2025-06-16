@@ -33,7 +33,12 @@ export default function CreateRoomScreen() {
       if (response.status === 200) {
         // Jeśli status 200, przekieruj na ekran choosePlayer
         router.push({ pathname: "/choosePlayer", params: { roomId, nickname } });
-      } else {
+      }
+      else if(response.status === 401 || response.status === 403) 
+      {
+        router.push({ pathname: '/index', params: {} });
+      }
+      else {
         // Jeśli status inny niż 200, wyświetl błąd
         const errorData = await response.json();
         Alert.alert("Błąd", errorData.message || "Nie udało się dołączyć do pokoju.");

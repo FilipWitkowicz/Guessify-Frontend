@@ -38,9 +38,15 @@ export default function CreateRoomScreen() {
       const data = await response.json();
       // console.log(data); 
       const roomId = data.roomId; 
-      if (response.ok) {
+      if (response.ok) 
+      {
         router.push({ pathname: '/choosePlayer', params: { roomId, nickname } });  // tutaj przekazac id pokoju i na jakim uzytkowniku jestes zalogowany
-      } else {
+      }
+      else if(response.status === 401 || response.status === 403) 
+      {
+        router.push({ pathname: '/index', params: {} });
+      }
+      else {
         Alert.alert("Błąd", data.error || "Nie udało się utworzyć pokoju.");
       }
     } catch (error) {
